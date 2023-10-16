@@ -1,8 +1,5 @@
 package com.example.hospital.models;
 
-
-
-
 import com.example.hospital.dto.FormEndereco;
 
 import jakarta.persistence.Entity;
@@ -39,12 +36,12 @@ public class Endereco {
 	}
 
 	
-	public Endereco(FormEndereco formEndereco) {
-		this.bairro=formEndereco.bairro();
-		this.cidade=formEndereco.cidade();
-		this.UF=formEndereco.UF();
-		this.cep=formEndereco.cep();
-		this.logradouro=formEndereco.logradouro();
+	public Endereco(FormEndereco endereco) {
+		this.bairro=endereco.bairro();
+		this.cidade=endereco.cidade();
+		this.UF=endereco.UF();
+		this.cep=endereco.cep();
+		this.logradouro=endereco.logradouro();
 		this.setApagado(false);
 	}
 	
