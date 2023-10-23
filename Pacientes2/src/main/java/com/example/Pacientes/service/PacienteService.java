@@ -46,6 +46,11 @@ public class PacienteService {
 		return  this.converterOrdenado(this.pacienteRepository.findAll());
 	}
 	
+
+	public DadosPacientes getPelaId(Long id){
+		return  new DadosPacientes(this.pacienteRepository.getById(id));
+	}
+	
 	public Paciente cadastrar(FormPaciente dados) {
 		Paciente paciente= new Paciente(dados);
 		Endereco endereco=new Endereco(dados.endereco());

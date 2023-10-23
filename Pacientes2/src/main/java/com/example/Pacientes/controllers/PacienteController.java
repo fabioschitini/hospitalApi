@@ -40,6 +40,13 @@ public class PacienteController {
 	public List<DadosPacientes> listarTodos(){
 		return pacienteService.buscarTodos();
 	} 
+
+	
+	
+	@GetMapping("/{id}")
+	public DadosPacientes getPelaId(@PathVariable Long id) {
+		return pacienteService.getPelaId(id);
+	}
 	 
 	@GetMapping("/enderecos")
 	public List<DadosEndereco> listarTodosEnderecos(){

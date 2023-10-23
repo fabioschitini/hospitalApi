@@ -37,9 +37,16 @@ public class MedicoController {
 
 	
 	@GetMapping
-	public List<DadosMedicos> listarTodos(){
-		return medicoService.buscarTodos();
+	public String listarTodos(){
+		return medicoService.buscarTodos().toString();
 	} 
+	
+
+	@GetMapping("/{id}")
+	public String getPelaId(@PathVariable Long id) {
+		return medicoService.getPelaId(id).toString();
+	}
+	
 	
 	@GetMapping("/enderecos")
 	public List<DadosEndereco> listarTodosEnderecos(){

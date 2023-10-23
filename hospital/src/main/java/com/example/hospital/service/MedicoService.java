@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.hospital.dto.DadosMedicos;
-	import com.example.hospital.dto.DadosListadosDeMedico;
+import com.example.hospital.dto.DadosParaConsulta;
+import com.example.hospital.dto.DadosListadosDeMedico;
 
 import com.example.hospital.dto.FormMedico;
 import com.example.hospital.dto.FormMedicoUpdate;
@@ -45,6 +46,11 @@ public class MedicoService {
 	
 	public List<DadosListadosDeMedico> buscarOrdenado(){
 		return  this.converterOrdenado(this.medicoRepository.findAll());
+	}
+	
+
+	public DadosParaConsulta getPelaId(Long id){
+		return  new DadosParaConsulta(this.medicoRepository.getById(id));
 	}
 	
 	public Medico cadastrar(FormMedico dados) {

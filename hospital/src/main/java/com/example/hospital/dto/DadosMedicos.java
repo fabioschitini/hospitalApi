@@ -13,4 +13,4 @@ public record DadosMedicos(Long id,  String nome, String email,String telefone,S
 		this(medico.getId(),medico.getNome(),medico.getEmail(), medico.getTelefone(),medico.getCrm(),medico.getEndereco(),medico.getEspecialidade());
 	}
 
-}
+} 
