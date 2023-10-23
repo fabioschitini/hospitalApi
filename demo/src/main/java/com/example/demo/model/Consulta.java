@@ -2,13 +2,18 @@ package com.example.demo.model;
 
 
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import lombok.NoArgsConstructor;
 
+@Entity(name="consultas")
+@NoArgsConstructor
+	
 public class Consulta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +21,8 @@ public class Consulta {
 	@OneToOne
 	private DataConsulta data;
 	private boolean cancelado;
-	private Long Medico;
-	private Long Paciente;
+	private Long medico;
+	private Long paciente;
 	@Enumerated(EnumType.STRING)
 	private MotivoCancelamento motivo;
 
@@ -41,16 +46,16 @@ public class Consulta {
 		this.cancelado = cancelado;
 	}
 	public Long getMedico() {
-		return Medico;
+		return medico;
 	}
 	public void setMedico(Long medico) {
-		Medico = medico;
+		medico = medico;
 	}
 	public Long getPaciente() {
-		return Paciente;
+		return paciente;
 	}
 	public void setPaciente(Long paciente) {
-		Paciente = paciente;
+		paciente = paciente;
 	}
 	public MotivoCancelamento getMotivo() {
 		return motivo;

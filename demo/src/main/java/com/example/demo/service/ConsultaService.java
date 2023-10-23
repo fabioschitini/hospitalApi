@@ -3,12 +3,20 @@ package com.example.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.repositories.ConsultaRepository;
+import com.example.demo.repositories.DataConsultaRepository;
+
+
 //import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 public class ConsultaService {
 	
+	@Autowired
+	private ConsultaRepository medicoRepository; 
 	
+	@Autowired
+	private DataConsultaRepository enderecoRepository;
 
 	
 	public String yolo() {

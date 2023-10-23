@@ -1,9 +1,15 @@
 package com.example.demo.model;
 
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.NoArgsConstructor;
+
+@Entity(name="datas")
+@NoArgsConstructor
+
 
 public class DataConsulta {
 	@Id
@@ -12,7 +18,10 @@ public class DataConsulta {
 	private String dia;
 	private String mes;
 	private String ano;
-	private String hora;
+	private int hora;
+	private int minuto;
+
+
 	
 	public Long getId() {
 		return id;
@@ -20,7 +29,7 @@ public class DataConsulta {
 	public String getDia() {
 		return dia;
 	}
-	public void setDia(String dia) {
+	public void setDia(String dia) {  
 		this.dia = dia;
 	}
 	public String getMes() {
@@ -35,22 +44,21 @@ public class DataConsulta {
 	public void setAno(String ano) {
 		this.ano = ano;
 	}
-	public String getHora() {
+	public int getHora() {
 		return hora;
 	}
-	public void setHora(String hora) {
+	public void setHora(int hora) {
 		this.hora = hora;
 	}
-	public String getMinuto() {
+	public int getMinuto() {
 		return minuto;
 	}
-	public void setMinuto(String minuto) {
+	public void setMinuto(int minuto) {
 		this.minuto = minuto;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	private String minuto;
 	
 	
 	/* public Endereco(FormEndereco formEndereco) {

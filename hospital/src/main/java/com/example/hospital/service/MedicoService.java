@@ -27,7 +27,7 @@ public class MedicoService {
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 	
-	public List<DadosMedicos> converterDadosMedicos(List<Medico> lista){
+	public List<DadosMedicos> converterDadosMedicos(List<Medico> lista){ 
 		if(lista.isEmpty()) return null;
 		return lista.stream()
 				.filter(c -> c.isApagado()==false)
