@@ -26,6 +26,8 @@ import com.example.demo.model.MotivoCancelamento;
 import com.example.demo.service.ConsultaService;
 import com.example.demo.service.MedicoFeignService;
 
+import jakarta.validation.Valid;
+
 
 
 
@@ -51,9 +53,9 @@ public class ConsultorioController {
 		return consultaService.pegarConsultaPelaId(id);
 
 	}
-	
+	 
 	@PostMapping
-	public ResponseEntity<ConsultaDto> cadastrar(@RequestBody @Validated FormConsulta dados) {
+	public ResponseEntity<ConsultaDto> cadastrar(@RequestBody @Valid FormConsulta dados) {
 		Consulta consulta; 
 		consulta = consultaService.cadastrar(dados);
 		return new ResponseEntity<ConsultaDto>( new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente())) ,HttpStatus.CREATED);

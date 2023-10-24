@@ -49,8 +49,11 @@ public class ConsultaService {
 	
 	public MedicoDto fetchMedico(Long id) {
 		MedicoDto medico=medicoFeign.getMedicos(id);
-		System.out.println(medico+"\n\n *********************************************");
-		System.out.println("\n\n ************************************************************");
+		if(medico==null) {
+			System.out.println("Nao achei o medicoooooooooooooooooooooooooooooooooooooooooooooo\n\n"+"\n\n *********************************************");
+			System.out.println("\n\n ************************************************************");
+			
+		}
 		return medico;
 	}
 	

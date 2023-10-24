@@ -1,9 +1,9 @@
 package com.example.demo.dto;
 
-import jakarta.annotation.Nonnull;
 //import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
-public record FormDataDeConsulta( @Nonnull String ano, @Nonnull String mes,
-		@Nonnull int dia, @Nonnull String dia_da_semana,  @Nonnull int hora,  @Nonnull int minuto) {
+public record FormDataDeConsulta( @NotNull String ano, @NotNull String mes,
+		@NotNull int dia, @NotNull String dia_da_semana,  @NotNull int hora,  @NotNull int minuto) {
 
 }

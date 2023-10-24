@@ -50,7 +50,12 @@ public class MedicoService {
 	
 
 	public DadosParaConsulta getPelaId(Long id){
-		return  new DadosParaConsulta(this.medicoRepository.getById(id));
+		
+		java.util.Optional<Medico> op=medicoRepository.findById(id);
+		if(op.isPresent()) {
+			return new DadosParaConsulta(this.medicoRepository.getById(id));
+		}
+		else return null;
 	}
 	
 	public Medico cadastrar(FormMedico dados) {
