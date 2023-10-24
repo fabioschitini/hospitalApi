@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.hospital.dto.DadosMedicos;
+import com.example.hospital.dto.DadosParaConsulta;
 import com.example.hospital.dto.DadosEndereco;
 import com.example.hospital.dto.DadosListadosDeMedico;
 import com.example.hospital.dto.FormMedico;
@@ -43,8 +44,8 @@ public class MedicoController {
 	
 
 	@GetMapping("/{id}")
-	public String getPelaId(@PathVariable Long id) {
-		return medicoService.getPelaId(id).toString();
+	public DadosParaConsulta getPelaId(@PathVariable Long id) {
+		return medicoService.getPelaId(id);
 	}
 	
 	

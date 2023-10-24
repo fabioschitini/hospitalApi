@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Pacientes.dto.DadosListadosDePacientes;
 import com.example.Pacientes.dto.DadosPacientes;
+import com.example.Pacientes.dto.DadosParaConsulta;
 import com.example.Pacientes.dto.FormPaciente;
 import com.example.Pacientes.dto.FormPacienteUpdate;
 import com.example.Pacientes.models.Endereco;
@@ -47,8 +48,8 @@ public class PacienteService {
 	}
 	
 
-	public DadosPacientes getPelaId(Long id){
-		return  new DadosPacientes(this.pacienteRepository.getById(id));
+	public DadosParaConsulta getPelaId(Long id){
+		return  new DadosParaConsulta(this.pacienteRepository.getById(id));
 	}
 	
 	public Paciente cadastrar(FormPaciente dados) {
