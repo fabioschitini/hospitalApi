@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 
 import com.example.demo.dto.ConsultaDto;
+import com.example.demo.dto.FormConsulta;
 import com.example.demo.dto.MedicoDto;
 import com.example.demo.dto.PacienteDto;
 import com.example.demo.model.Consulta;
+import com.example.demo.model.DataConsulta;
 import com.example.demo.repositories.ConsultaRepository;
 import com.example.demo.repositories.DataConsultaRepository;
 
@@ -24,7 +26,7 @@ public class ConsultaService {
 	private ConsultaRepository consultaRepository; 
 	
 	@Autowired
-	private DataConsultaRepository enderecoRepository;
+	private DataConsultaRepository dataRepository;
 	
 	@Autowired
 	private MedicoFeignService medicoFeign;
@@ -65,14 +67,12 @@ public class ConsultaService {
 		return consultaDados;
 	}
 
-	/*public Consulta cadastrar(FormPaciente dados) {
-		Paciente paciente= new Paciente(dados);
-		Endereco endereco=new Endereco(dados.endereco());
-		endereco.setComplemento(dados.endereco().complemento());
-		endereco.setNumero(dados.endereco().numero());
-		paciente.setEndereco(endereco);
-		enderecoRepository.save(endereco);
-		pacienteRepository.save(paciente);
+	public Consulta cadastrar(FormConsulta dados) {
+		Consulta consulta= new Consulta(dados);
+		DataConsulta data=new DataConsulta(dados.dataConsulta());
+		consulta.setData(data);;
+		dataRepository.save(data);
+		consultaRepository.save(consulta);
 
 		//Optional<Endereco> op=enderecoRepository.findById(dados.endereco());
 		//if(op.isPresent()) {
@@ -80,24 +80,9 @@ public class ConsultaService {
 			//medicoRepository.save(medico);
 			//return ; 
 		//}
-		return paciente; 
+		return consulta; 
 	}
-	
 	/*
-	 * 
-	 * 
-	public DadosMedico getDadosMedicos() {
-		
-		WebClient.Builder builder=WebClient.builder();
-		String url="http://10.0.0.5:8082/medico-ms/medicos/1";
-		DadosMedico dados=builder.build()
-				.get()
-				.uri(url)
-				.retrieve()
-				.bodyToMono(DadosMedico.class)
-				.block();
-		
-		return dados;
-	} */
+	 */
 
 }

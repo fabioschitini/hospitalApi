@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.example.demo.dto.ConsultaDto;
+import com.example.demo.dto.FormConsulta;
 import com.example.demo.dto.MedicoDto;
 import com.example.demo.dto.PacienteDto;
 import com.example.demo.model.Consulta;
@@ -26,26 +29,34 @@ import com.example.demo.service.MedicoFeignService;
 
 
 
+
 @RestController 
 @RequestMapping("/consultas")
 @Component
 public class ConsultorioController { 
 	
 	@Autowired
-	private ConsultaService consulta;
+	private ConsultaService consultaService;
 	
 	
 	@GetMapping
 	public List<ConsultaDto> listarTodo(){
-		return consulta.buscarTodos();
+		return consultaService.buscarTodos();
 
 	}
 	
 	
 	@GetMapping("/{id}")
 	public ConsultaDto listarTodos(@PathVariable Long id){
-		return consulta.pegarConsultaPelaId(id);
+		return consultaService.pegarConsultaPelaId(id);
 
+	}
+	
+	@PostMapping
+	public ResponseEntity<ConsultaDto> cadastrar(@RequestBody @Validated FormConsulta dados) {
+		Consulta consulta; 
+		consulta = consultaService.cadastrar(dados);
+		return new ResponseEntity<ConsultaDto>( new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente())) ,HttpStatus.CREATED);
 	}
 	/*
 	@GetMapping("/buscarPorNome")

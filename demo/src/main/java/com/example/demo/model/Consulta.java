@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 
 
+import com.example.demo.dto.FormConsulta;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,6 +27,16 @@ public class Consulta {
 	private Long paciente;
 	@Enumerated(EnumType.STRING)
 	private MotivoCancelamento motivo;
+	
+	
+	public Consulta(){}
+	
+	
+	public Consulta(FormConsulta dados) {
+		this.medico=dados.medico();
+		this.paciente=dados.paciente();
+		this.cancelado=false;
+	}
 
 
 	public Long getId() {

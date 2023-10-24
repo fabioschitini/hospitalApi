@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 
+import com.example.demo.dto.FormDataDeConsulta;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +23,19 @@ public class DataConsulta {
 	private int dia;
 	private int hora; 
 	private int minuto;   
+	
+	
+	public DataConsulta() {}
 
+	
+	public DataConsulta(FormDataDeConsulta dados) {
+		this.ano=dados.ano();
+		this.mes=dados.mes();
+		this.dia=dados.dia();
+		this.dia_da_semana=dados.dia_da_semana();
+		this.hora=dados.hora();
+		this.minuto=dados.minuto();
+	}
 
 	
 	public Long getId() {
