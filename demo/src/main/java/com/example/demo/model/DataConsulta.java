@@ -15,21 +15,22 @@ public class DataConsulta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String dia;
+	private String dia_da_semana;
 	private String mes;
 	private String ano;
-	private int hora;
-	private int minuto;
+	private int dia;
+	private int hora; 
+	private int minuto;   
 
 
 	
 	public Long getId() {
 		return id;
 	}
-	public String getDia() {
+	public int getDia() { 
 		return dia;
 	}
-	public void setDia(String dia) {  
+	public void setDia(int dia) {   
 		this.dia = dia;
 	}
 	public String getMes() {
@@ -59,6 +60,13 @@ public class DataConsulta {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	public String getDia_da_semana() {
+		return dia_da_semana;
+	}
+	public void setDia_da_semana(String dia_da_semana) {
+		this.dia_da_semana = dia_da_semana;
+	}
+
 	
 	
 	/* public Endereco(FormEndereco formEndereco) {

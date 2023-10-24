@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.ConsultaDto;
+import com.example.demo.dto.MedicoDto;
+import com.example.demo.dto.PacienteDto;
+import com.example.demo.model.Consulta;
+import com.example.demo.model.MotivoCancelamento;
 import com.example.demo.service.ConsultaService;
 import com.example.demo.service.MedicoFeignService;
 
@@ -22,19 +27,24 @@ import com.example.demo.service.MedicoFeignService;
 
 
 @RestController 
-@RequestMapping("/medicos")
+@RequestMapping("/consultas")
 @Component
 public class ConsultorioController { 
 	
 	@Autowired
 	private ConsultaService consulta;
 	
-	@Autowired
-	private MedicoFeignService medico;
+	
+	@GetMapping
+	public List<ConsultaDto> listarTodo(){
+		return consulta.buscarTodos();
+
+	}
+	
 	
 	@GetMapping("/{id}")
-	public String listarTodos(@PathVariable Long id){
-		return medico.getMedicos(id).toString();
+	public ConsultaDto listarTodos(@PathVariable Long id){
+		return consulta.pegarConsultaPelaId(id);
 
 	}
 	/*
