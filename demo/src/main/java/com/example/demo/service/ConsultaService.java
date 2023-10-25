@@ -11,6 +11,8 @@ import com.example.demo.dto.ConsultaDto;
 import com.example.demo.dto.FormConsulta;
 import com.example.demo.dto.MedicoDto;
 import com.example.demo.dto.PacienteDto;
+import com.example.demo.exception.MedicoNaoEstaNoSistemaException;
+import com.example.demo.exception.PacienteNaoEstaNoSistemaException;
 import com.example.demo.model.Consulta;
 import com.example.demo.model.DataConsulta;
 import com.example.demo.repositories.ConsultaRepository;
@@ -35,11 +37,13 @@ public class ConsultaService {
 	private PacienteFeignService pacienteFeign;
 	
 	
-	public List<ConsultaDto> converterDadosConsulta(List<Consulta> lista){
+	public List<ConsultaDto> converterDadosConsulta(List<Consulta> lista) {
 		if(lista.isEmpty()) return null;
-		return lista.stream()
-                .map( emp -> new ConsultaDto(emp, this.fetchMedico(emp.getMedico()), this.fetchPaciente(emp.getPaciente() )) )
-                .collect(Collectors.toList());
+			return lista.stream()
+             .map( emp -> new ConsultaDto(emp, this.fetchMedico(emp.getMedico()), this.fetchPaciente(emp.getPaciente() )) )
+             .collect(Collectors.toList());
+	
+
 	}
 	
 	public List<ConsultaDto> buscarTodos(){
@@ -50,17 +54,16 @@ public class ConsultaService {
 	public MedicoDto fetchMedico(Long id) {
 		MedicoDto medico=medicoFeign.getMedicos(id);
 		if(medico==null) {
-			System.out.println("Nao achei o medicoooooooooooooooooooooooooooooooooooooooooooooo\n\n"+"\n\n *********************************************");
+			System.out.println("nuloooooooooooooooooooooooooooooooooooooooooooooooooooo \n \n"+"\n\n *********************************************");
 			System.out.println("\n\n ************************************************************");
-			
 		}
 		return medico;
 	}
 	
 	public PacienteDto fetchPaciente(Long id) {
 		PacienteDto paciente=pacienteFeign.getPaciente(id);
-		System.out.println(paciente+"\n\n *********************************************");
-		System.out.println("\n\n ************************************************************");
+		//System.out.println(paciente+"\n\n *********************************************");
+		//System.out.println("\n\n ************************************************************");
 		return paciente;
 	}
 	
@@ -70,10 +73,14 @@ public class ConsultaService {
 		return consultaDados;
 	}
 
-	public Consulta cadastrar(FormConsulta dados) {
+	public Consulta cadastrar(FormConsulta dados) throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException {
 		Consulta consulta= new Consulta(dados);
 		DataConsulta data=new DataConsulta(dados.dataConsulta());
-		consulta.setData(data);;
+		consulta.setData(data);
+		MedicoDto medico=this.fetchMedico(consulta.getMedico());
+		PacienteDto paciente=this.fetchPaciente(consulta.getPaciente());
+		if(medico==null) throw new MedicoNaoEstaNoSistemaException("Medico nao esta cadastrado no sistema");
+		if(paciente==null) throw new PacienteNaoEstaNoSistemaException("Paciente nao esta cadastrado no sistema");
 		dataRepository.save(data);
 		consultaRepository.save(consulta);
 

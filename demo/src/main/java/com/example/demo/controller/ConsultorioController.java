@@ -21,6 +21,8 @@ import com.example.demo.dto.ConsultaDto;
 import com.example.demo.dto.FormConsulta;
 import com.example.demo.dto.MedicoDto;
 import com.example.demo.dto.PacienteDto;
+import com.example.demo.exception.MedicoNaoEstaNoSistemaException;
+import com.example.demo.exception.PacienteNaoEstaNoSistemaException;
 import com.example.demo.model.Consulta;
 import com.example.demo.model.MotivoCancelamento;
 import com.example.demo.service.ConsultaService;
@@ -55,10 +57,20 @@ public class ConsultorioController {
 	}
 	 
 	@PostMapping
-	public ResponseEntity<ConsultaDto> cadastrar(@RequestBody @Valid FormConsulta dados) {
+	public ResponseEntity<String> cadastrar(@RequestBody @Valid FormConsulta dados)  {
 		Consulta consulta; 
-		consulta = consultaService.cadastrar(dados);
-		return new ResponseEntity<ConsultaDto>( new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente())) ,HttpStatus.CREATED);
+		try {
+			consulta = consultaService.cadastrar(dados);
+		} catch (MedicoNaoEstaNoSistemaException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e.getMessage());
+			return new ResponseEntity<String>( e.getMessage(),HttpStatus.BAD_REQUEST);
+		} catch (PacienteNaoEstaNoSistemaException e) {
+			System.err.println(e.getMessage());
+			return new ResponseEntity<String>( e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+		ConsultaDto coonsultaCadastrada=new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente()));
+		return new ResponseEntity<String>(coonsultaCadastrada.toString(), HttpStatus.CREATED);
 	}
 	/*
 	@GetMapping("/buscarPorNome")

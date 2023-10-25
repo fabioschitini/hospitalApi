@@ -49,7 +49,11 @@ public class PacienteService {
 	
 
 	public DadosParaConsulta getPelaId(Long id){
-		return  new DadosParaConsulta(this.pacienteRepository.getById(id));
+		java.util.Optional<Paciente> op=pacienteRepository.findById(id);
+		if(op.isPresent()) {
+			return new DadosParaConsulta(this.pacienteRepository.getById(id));
+		}
+		else return null;
 	}
 	
 	public Paciente cadastrar(FormPaciente dados) {
