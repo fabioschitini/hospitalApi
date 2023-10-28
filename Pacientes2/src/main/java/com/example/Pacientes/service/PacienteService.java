@@ -50,7 +50,7 @@ public class PacienteService {
 
 	public DadosParaConsulta getPelaId(Long id){
 		java.util.Optional<Paciente> op=pacienteRepository.findById(id);
-		if(op.isPresent()) {
+		if(op.isPresent() && op.get().isApagado()==false) {
 			return new DadosParaConsulta(this.pacienteRepository.getById(id));
 		}
 		else return null;

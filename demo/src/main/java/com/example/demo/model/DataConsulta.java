@@ -4,6 +4,8 @@ package com.example.demo.model;
 import com.example.demo.dto.FormDataDeConsulta;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,16 +19,18 @@ public class DataConsulta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String dia_da_semana;
-	private String mes;
-	private String ano;
-	private int dia;
+	@Enumerated(EnumType.STRING)
+	private DiaDaSemana dia_da_semana;
+	@Enumerated(EnumType.STRING)
+	private Mes mes;
+	private int ano;
+	private int dia; 
 	private int hora; 
-	private int minuto;   
+	private int minuto;    
 	
 	
 	public DataConsulta() {}
-
+ 
 	
 	public DataConsulta(FormDataDeConsulta dados) {
 		this.ano=dados.ano();
@@ -47,16 +51,16 @@ public class DataConsulta {
 	public void setDia(int dia) {   
 		this.dia = dia;
 	}
-	public String getMes() {
+	public Mes getMes() {
 		return mes;
 	}
-	public void setMes(String mes) {
+	public void setMes(Mes mes) {
 		this.mes = mes;
 	}
-	public String getAno() {
+	public int getAno() {
 		return ano;
 	}
-	public void setAno(String ano) {
+	public void setAno(int ano) {
 		this.ano = ano;
 	}
 	public int getHora() {
@@ -74,10 +78,10 @@ public class DataConsulta {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getDia_da_semana() {
+	public DiaDaSemana getDia_da_semana() {
 		return dia_da_semana;
 	}
-	public void setDia_da_semana(String dia_da_semana) {
+	public void setDia_da_semana(DiaDaSemana dia_da_semana) {
 		this.dia_da_semana = dia_da_semana;
 	}
 

@@ -4,6 +4,4 @@ public enum MotivoCancelamento {
 	PacienteDesistiu, 
 	MedicoCancelou, 
 	Outros
-	
-
 } 

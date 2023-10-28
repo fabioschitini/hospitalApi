@@ -26,7 +26,7 @@ public class Consulta {
 	private Long medico;
 	private Long paciente;
 	@Enumerated(EnumType.STRING)
-	private MotivoCancelamento motivo;
+	private MotivoCancelamento motivo; 
 	
 	
 	public Consulta(){}

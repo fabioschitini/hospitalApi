@@ -52,7 +52,7 @@ public class MedicoService {
 	public DadosParaConsulta getPelaId(Long id){
 		
 		java.util.Optional<Medico> op=medicoRepository.findById(id);
-		if(op.isPresent()) {
+		if(op.isPresent() && op.get().isApagado()==false) {
 			return new DadosParaConsulta(this.medicoRepository.getById(id));
 		}
 		else return null;

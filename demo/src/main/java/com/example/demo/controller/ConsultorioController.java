@@ -1,12 +1,16 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,20 +61,11 @@ public class ConsultorioController {
 	}
 	 
 	@PostMapping
-	public ResponseEntity<String> cadastrar(@RequestBody @Valid FormConsulta dados)  {
+	public ResponseEntity<?> cadastrar(@RequestBody @Valid FormConsulta dados)  throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException,MethodArgumentNotValidException,HttpMessageNotReadableException  {
 		Consulta consulta; 
-		try {
-			consulta = consultaService.cadastrar(dados);
-		} catch (MedicoNaoEstaNoSistemaException e) {
-			// TODO Auto-generated catch block
-			System.err.println(e.getMessage());
-			return new ResponseEntity<String>( e.getMessage(),HttpStatus.BAD_REQUEST);
-		} catch (PacienteNaoEstaNoSistemaException e) {
-			System.err.println(e.getMessage());
-			return new ResponseEntity<String>( e.getMessage(),HttpStatus.BAD_REQUEST);
-		}
+		consulta = consultaService.cadastrar(dados);
 		ConsultaDto coonsultaCadastrada=new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente()));
-		return new ResponseEntity<String>(coonsultaCadastrada.toString(), HttpStatus.CREATED);
+		return new ResponseEntity<>(coonsultaCadastrada, HttpStatus.CREATED);
 	}
 	/*
 	@GetMapping("/buscarPorNome")

@@ -77,7 +77,9 @@ public class ConsultaService {
 		Consulta consulta= new Consulta(dados);
 		DataConsulta data=new DataConsulta(dados.dataConsulta());
 		consulta.setData(data);
-		MedicoDto medico=this.fetchMedico(consulta.getMedico());
+		MedicoDto medico;
+		//if(dados.medico()==null) medico=
+		 medico=this.fetchMedico(consulta.getMedico());
 		PacienteDto paciente=this.fetchPaciente(consulta.getPaciente());
 		if(medico==null) throw new MedicoNaoEstaNoSistemaException("Medico nao esta cadastrado no sistema");
 		if(paciente==null) throw new PacienteNaoEstaNoSistemaException("Paciente nao esta cadastrado no sistema");
@@ -91,6 +93,22 @@ public class ConsultaService {
 			//return ; 
 		//}
 		return consulta; 
+	}
+	
+	public boolean ChecarAntecendenciaDe30Minutos() {
+		return true;
+	}
+	
+	public boolean ChecarPacienteJaMarcouNoDia() {
+		return true;
+	}
+	
+	public boolean ChecarSeMedicoEstaDisponivel() {
+		return true;
+	}
+	
+	public String pegarMedicoAleatorio(List<MedicoDto> medicos) {
+		return "yo";
 	}
 	/*
 	 */
