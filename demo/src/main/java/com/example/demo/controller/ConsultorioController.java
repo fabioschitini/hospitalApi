@@ -26,6 +26,8 @@ import com.example.demo.dto.FormConsulta;
 import com.example.demo.dto.MedicoDto;
 import com.example.demo.dto.PacienteDto;
 import com.example.demo.exception.MedicoNaoEstaNoSistemaException;
+import com.example.demo.exception.MenosDe30MinutosException;
+import com.example.demo.exception.PacienteJaMarcouNoDiaException;
 import com.example.demo.exception.PacienteNaoEstaNoSistemaException;
 import com.example.demo.model.Consulta;
 import com.example.demo.model.MotivoCancelamento;
@@ -41,7 +43,7 @@ import jakarta.validation.Valid;
 @RestController 
 @RequestMapping("/consultas")
 @Component
-public class ConsultorioController { 
+public class ConsultorioController {  
 	
 	@Autowired
 	private ConsultaService consultaService;
@@ -61,7 +63,7 @@ public class ConsultorioController {
 	}
 	 
 	@PostMapping
-	public ResponseEntity<?> cadastrar(@RequestBody @Valid FormConsulta dados)  throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException,MethodArgumentNotValidException,HttpMessageNotReadableException  {
+	public ResponseEntity<?> cadastrar(@RequestBody @Valid FormConsulta dados)  throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException,MethodArgumentNotValidException,HttpMessageNotReadableException, MenosDe30MinutosException, PacienteJaMarcouNoDiaException  {
 		Consulta consulta; 
 		consulta = consultaService.cadastrar(dados);
 		ConsultaDto coonsultaCadastrada=new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente()));

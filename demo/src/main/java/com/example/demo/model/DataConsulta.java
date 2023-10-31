@@ -21,8 +21,7 @@ public class DataConsulta {
 	private Long id;
 	@Enumerated(EnumType.STRING)
 	private DiaDaSemana dia_da_semana;
-	@Enumerated(EnumType.STRING)
-	private Mes mes;
+	private int mes;
 	private int ano;
 	private int dia; 
 	private int hora; 
@@ -31,7 +30,7 @@ public class DataConsulta {
 	
 	public DataConsulta() {}
  
-	
+	 
 	public DataConsulta(FormDataDeConsulta dados) {
 		this.ano=dados.ano();
 		this.mes=dados.mes();
@@ -51,10 +50,10 @@ public class DataConsulta {
 	public void setDia(int dia) {   
 		this.dia = dia;
 	}
-	public Mes getMes() {
+	public int getMes() {
 		return mes;
 	}
-	public void setMes(Mes mes) {
+	public void setMes(int mes) {
 		this.mes = mes;
 	}
 	public int getAno() {

@@ -43,9 +43,14 @@ public class MedicoController {
 	} 
 	
 
-	@GetMapping("/{id}")
+	@GetMapping("consulta/{id}")
 	public DadosParaConsulta getPelaId(@PathVariable Long id) {
 		return medicoService.getPelaId(id);
+	}
+	
+	@GetMapping("consulta")
+	public List<DadosParaConsulta> getAllParaConsultas() {
+		return medicoService.buscarTodosParaConsulta();
 	}
 	
 	

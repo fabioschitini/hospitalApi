@@ -12,7 +12,8 @@ import jakarta.validation.constraints.NotNull;
 public record FormDataDeConsulta( 
 @NotNull(message = "Ano Invalido,não pode ser nulo") @Min(value = 2023, message = "Ano Invalid0: tem que ser maior ou igual a 2023")
 @Max(value = 2025, message = "Ano Invalido: Tem que ser menor ou igual a 2025") int ano,
-@NotNull(message = "Mes Invalido,não pode ser nulo") Mes mes,
+@NotNull(message = "Mes Invalido,não pode ser nulo")  @Min(value = 1, message = "Hora Invalida: tem que ser maior ou igual a 71")
+@Max(value = 12, message = "Hora Invalida: Tem que ser menor ou igual a 12") int mes,
 @NotNull(message = "Dia Invalido,não pode ser nulo") int dia,
 @NotNull(message = "dia_da_semana  Invalido,não pode ser nulo") DiaDaSemana dia_da_semana, 
 @NotNull(message = "hora Invalido,não pode ser nulo")     @Min(value = 7, message = "Hora Invalida: tem que ser maior ou igual a 7")

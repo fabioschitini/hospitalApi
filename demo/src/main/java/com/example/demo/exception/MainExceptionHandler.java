@@ -63,6 +63,21 @@ public class MainExceptionHandler  {
 		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
 	}
 	
+	@ExceptionHandler(MenosDe30MinutosException.class)
+	public ResponseEntity<?> handleMenosDe30MinutosException(){
+		Map<String,String> errors=new HashMap<String,String>();
+		errors.put("mensagem","As consulta tem que ser marcadas com 30 minuto de antecendencia");
+		System.err.println("As consulta tem que ser marcadas com 30 minuto de antecendencia");
+		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler(PacienteJaMarcouNoDiaException.class)
+	public ResponseEntity<?> handlePacienteJaMarcouNoDiaException(){
+		Map<String,String> errors=new HashMap<String,String>();
+		errors.put("mensagem","Paciente já tem uma consulta marcada para esse dia");
+		System.err.println("Paciente já tem uma consulta marcada para esse dia");
+		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
+	}
+	
 	
 	
 

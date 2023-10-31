@@ -16,5 +16,19 @@ public record ConsultaDto(Long id,  MedicoDto medico, PacienteDto paciente,Motiv
 		this(consulta.getId(),medico,paciente, consulta.getMotivo(),consulta.isCancelado(),consulta.getData());
 	}
 
+	public MedicoDto medico() {
+		return medico;
+	}
+
+	public PacienteDto paciente() {
+		return paciente;
+	}
+
+	public DataConsulta data() {
+		return data;
+	}
+	
+	
+
 	
 }

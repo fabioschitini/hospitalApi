@@ -61,13 +61,13 @@ public class Consulta {
 		return medico;
 	}
 	public void setMedico(Long medico) {
-		medico = medico;
+		this.medico = medico;
 	}
 	public Long getPaciente() {
 		return paciente;
 	}
 	public void setPaciente(Long paciente) {
-		paciente = paciente;
+		this.paciente = paciente;
 	}
 	public MotivoCancelamento getMotivo() {
 		return motivo;
