@@ -38,7 +38,7 @@ import jakarta.validation.Valid;
 
 
 
-
+ 
 
 @RestController 
 @RequestMapping("/consultas")
