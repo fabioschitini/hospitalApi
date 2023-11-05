@@ -16,6 +16,11 @@ import lombok.NoArgsConstructor;
 
 
 public class DataConsulta {
+	@Override
+	public String toString() {
+		return "DataConsulta [id=" + id + ", dia_da_semana=" + dia_da_semana + ", mes=" + mes + ", ano=" + ano
+				+ ", dia=" + dia + ", hora=" + hora + ", minuto=" + minuto + "]";
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

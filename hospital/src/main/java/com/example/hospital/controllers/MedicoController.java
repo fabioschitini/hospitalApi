@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/medicos")
 public class MedicoController { 
 	 
-	@Autowired
+	@Autowired 
 	private MedicoService medicoService;
 	@Autowired
 	private EnderecoService enderecoService;

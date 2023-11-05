@@ -2,6 +2,6 @@ INSERT INTO DATAS(ano, mes,dia_da_semana,dia,hora,minuto) VALUES(2023,10,'SEGUND
 INSERT INTO DATAS(ano, mes,dia_da_semana,dia,hora,minuto) VALUES(2023,10,'TERCA',21,11,30);
 INSERT INTO DATAS(ano, mes,dia_da_semana,dia,hora,minuto) VALUES(2023,10,'QUARTA',22,12,30);
 
-INSERT INTO CONSULTAS(data_id, cancelado, medico,paciente,motivo) VALUES(1,false, 1,1,'PacienteDesistiu');
-INSERT INTO CONSULTAS(data_id, cancelado, medico,paciente,motivo) VALUES(2,false, 1,2,'MedicoCancelou');
-INSERT INTO CONSULTAS(data_id, cancelado, medico,paciente,motivo) VALUES(3,false, 2,1,'Outros');
+INSERT INTO CONSULTAS(data_id, cancelado, medico,paciente) VALUES(1,false, 1,1);
+INSERT INTO CONSULTAS(data_id, cancelado, medico,paciente) VALUES(2,false, 1,2);
+INSERT INTO CONSULTAS(data_id, cancelado, medico,paciente) VALUES(3,false, 2,1);

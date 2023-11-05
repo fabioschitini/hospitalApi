@@ -14,6 +14,8 @@ import com.example.demo.dto.ConsultaDto;
 import com.example.demo.dto.FormConsulta;
 import com.example.demo.dto.MedicoDto;
 import com.example.demo.dto.PacienteDto;
+import com.example.demo.exception.MarcouConsultaNoPassadoException;
+import com.example.demo.exception.MedicoEstaEmConsultaException;
 import com.example.demo.exception.MedicoNaoEstaNoSistemaException;
 import com.example.demo.exception.MenosDe30MinutosException;
 import com.example.demo.exception.PacienteJaMarcouNoDiaException;
@@ -53,7 +55,7 @@ public class ConsultaService<R> {
 	
 	public List<ConsultaDto> buscarTodos(){
 		return  this.converterDadosConsulta(this.consultaRepository.findAll());
-	}
+	} 
 	
 	
 	public MedicoDto fetchMedico(Long id) {
@@ -84,7 +86,7 @@ public class ConsultaService<R> {
 		return consultaDados;
 	}
 
-	public Consulta cadastrar(FormConsulta dados) throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException, MenosDe30MinutosException, PacienteJaMarcouNoDiaException {
+	public Consulta cadastrar(FormConsulta dados) throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException, MenosDe30MinutosException, PacienteJaMarcouNoDiaException, MedicoEstaEmConsultaException {
 		Consulta consulta= new Consulta(dados);
 		DataConsulta data=new DataConsulta(dados.dataConsulta());
 		consulta.setData(data);
@@ -96,6 +98,7 @@ public class ConsultaService<R> {
 		if(paciente==null) throw new PacienteNaoEstaNoSistemaException("Paciente nao esta cadastrado no sistema");
 		ChecarAntecendenciaDe30Minutos(data);
 		ChecarPacienteJaMarcouNoDia(paciente,data);
+		ChecarSeMedicoEstaDisponivel(medico,data);
 		consulta.setMedico(medico.id());
 		dataRepository.save(data);
 		consultaRepository.save(consulta);
@@ -123,8 +126,24 @@ public class ConsultaService<R> {
 		
 	}
 	
-	public void ChecarSeMedicoEstaDisponivel() {
+	public void ChecarSeMedicoEstaDisponivel(MedicoDto medico,DataConsulta data) throws MedicoEstaEmConsultaException {
+		List<ConsultaDto> consultas=this.buscarTodos();
+		List<ConsultaDto> consultaFiltradas=consultas.stream().filter( c->c.medico().id()==medico.id()&& 
+				data.getAno()==c.data().getAno()&& data.getMes()==c.data().getMes()&& c.data().getDia()==data.getDia() &&
+						data.getHora()*60-data.getMinuto()-c.data().getHora()*60+c.data().getMinuto()<31 ).collect(Collectors.toList());
+		System.err.println(data); 
+		if(consultaFiltradas.size()>0)  throw new MedicoEstaEmConsultaException("Medico está com consulta marcada nesse horário");
+
 	}
+	
+	public void ChecarSeConsultaNaoFoiFeitaNoPassado(DataConsulta data) throws MarcouConsultaNoPassadoException {
+		LocalDateTime now = LocalDateTime.now(); 
+		if(data.getAno()<now.getYear() || data.getMes()<now.getMonthValue()|| data.getDia()<now.getDayOfMonth()|| 
+				(now.getYear()==data.getAno()&& now.getMonthValue()==data.getMes()&& now.getDayOfMonth()==data.getDia() && data.getHora()<now.getHour()));{
+					throw new MarcouConsultaNoPassadoException("Marcou consulta no passado");
+				}
+	}
+	
 	
 	public MedicoDto pegarMedicoAleatorio(List<MedicoDto> medicos) {
 		if(medicos.size()==0) return null;

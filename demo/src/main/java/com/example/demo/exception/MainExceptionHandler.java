@@ -78,6 +78,21 @@ public class MainExceptionHandler  {
 		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
 	}
 	
+	@ExceptionHandler(MedicoEstaEmConsultaException.class)
+	public ResponseEntity<?> handleMedicoEstaEmConsultaException(){
+		Map<String,String> errors=new HashMap<String,String>();
+		errors.put("mensagem","Medico está em consulta nesse horario");
+		System.err.println("Medico está em consulta nesse horario");
+		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(MarcouConsultaNoPassadoException.class)
+	public ResponseEntity<?> handleMarcouConsultaNoPassadoException(){
+		Map<String,String> errors=new HashMap<String,String>();
+		errors.put("mensagem","Marcou consulta no passado");
+		System.err.println("Marcou consulta no passado");
+		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
+	}
 	
 	
 
