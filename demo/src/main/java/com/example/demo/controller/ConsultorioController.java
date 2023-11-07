@@ -1,17 +1,13 @@
 package com.example.demo.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,17 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.ConsultaDto;
 import com.example.demo.dto.FormConsulta;
-import com.example.demo.dto.MedicoDto;
-import com.example.demo.dto.PacienteDto;
+import com.example.demo.dto.FormDesmacar;
+import com.example.demo.exception.CancelarCom1DiaDeAntecedenciaException;
+import com.example.demo.exception.ConsultaNaoEncontradaException;
+import com.example.demo.exception.MarcouConsultaNoPassadoException;
 import com.example.demo.exception.MedicoEstaEmConsultaException;
 import com.example.demo.exception.MedicoNaoEstaNoSistemaException;
 import com.example.demo.exception.MenosDe30MinutosException;
 import com.example.demo.exception.PacienteJaMarcouNoDiaException;
 import com.example.demo.exception.PacienteNaoEstaNoSistemaException;
 import com.example.demo.model.Consulta;
-import com.example.demo.model.MotivoCancelamento;
 import com.example.demo.service.ConsultaService;
-import com.example.demo.service.MedicoFeignService;
 
 import jakarta.validation.Valid;
 
@@ -47,7 +43,7 @@ import jakarta.validation.Valid;
 public class ConsultorioController {   
 	
 	@Autowired
-	private ConsultaService consultaService;
+	private ConsultaService<?> consultaService;
 	
 	
 	@GetMapping
@@ -64,9 +60,17 @@ public class ConsultorioController {
 	}
 	 
 	@PostMapping
-	public ResponseEntity<?> cadastrar(@RequestBody @Valid FormConsulta dados)  throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException,MethodArgumentNotValidException,HttpMessageNotReadableException, MenosDe30MinutosException, PacienteJaMarcouNoDiaException, MedicoEstaEmConsultaException  {
+	public ResponseEntity<?> cadastrar(@RequestBody @Valid FormConsulta dados)  throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException,MethodArgumentNotValidException,HttpMessageNotReadableException, MenosDe30MinutosException, PacienteJaMarcouNoDiaException, MedicoEstaEmConsultaException, MarcouConsultaNoPassadoException  {
 		Consulta consulta; 
 		consulta = consultaService.cadastrar(dados);
+		ConsultaDto coonsultaCadastrada=new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente()));
+		return new ResponseEntity<>(coonsultaCadastrada, HttpStatus.CREATED);
+	}
+	
+	@PutMapping
+	public ResponseEntity<?> desmacar(@RequestBody @Valid FormDesmacar dados)  throws MethodArgumentNotValidException,HttpMessageNotReadableException,ConsultaNaoEncontradaException, CancelarCom1DiaDeAntecedenciaException  {
+		Consulta consulta; 
+		consulta = consultaService.desmarcar(dados.consulta(),dados.motivo());
 		ConsultaDto coonsultaCadastrada=new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente()));
 		return new ResponseEntity<>(coonsultaCadastrada, HttpStatus.CREATED);
 	}

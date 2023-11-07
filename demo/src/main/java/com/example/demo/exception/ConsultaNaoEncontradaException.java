@@ -1,13 +1,13 @@
 package com.example.demo.exception;
 
-public class PacienteJaMarcouNoDiaException extends Exception {
+public class ConsultaNaoEncontradaException extends Exception {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public PacienteJaMarcouNoDiaException(String str) {
+	public ConsultaNaoEncontradaException(String str) {
 		super(str);
 
 	}

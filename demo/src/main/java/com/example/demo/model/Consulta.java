@@ -1,5 +1,5 @@
 package com.example.demo.model;
-
+ 
 
 
 import com.example.demo.dto.FormConsulta;
@@ -26,7 +26,7 @@ public class Consulta {
 	private Long medico;
 	private Long paciente;
 	@Enumerated(EnumType.STRING)
-	private MotivoCancelamento motivo; 
+	private MotivoCancelamento motivo;
 	
 	
 	public Consulta(){}
@@ -54,8 +54,8 @@ public class Consulta {
 	public boolean isCancelado() {
 		return cancelado;
 	}
-	public void setCancelado(boolean cancelado) {
-		this.cancelado = cancelado;
+	public void setCancelado() {
+		this.cancelado = true;
 	}
 	public Long getMedico() {
 		return medico;

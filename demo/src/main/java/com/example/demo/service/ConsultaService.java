@@ -2,8 +2,8 @@ package com.example.demo.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,8 @@ import com.example.demo.dto.ConsultaDto;
 import com.example.demo.dto.FormConsulta;
 import com.example.demo.dto.MedicoDto;
 import com.example.demo.dto.PacienteDto;
+import com.example.demo.exception.CancelarCom1DiaDeAntecedenciaException;
+import com.example.demo.exception.ConsultaNaoEncontradaException;
 import com.example.demo.exception.MarcouConsultaNoPassadoException;
 import com.example.demo.exception.MedicoEstaEmConsultaException;
 import com.example.demo.exception.MedicoNaoEstaNoSistemaException;
@@ -22,8 +24,10 @@ import com.example.demo.exception.PacienteJaMarcouNoDiaException;
 import com.example.demo.exception.PacienteNaoEstaNoSistemaException;
 import com.example.demo.model.Consulta;
 import com.example.demo.model.DataConsulta;
+import com.example.demo.model.MotivoCancelamento;
 import com.example.demo.repositories.ConsultaRepository;
 import com.example.demo.repositories.DataConsultaRepository;
+
 
 
 //import org.springframework.web.reactive.function.client.WebClient;
@@ -81,12 +85,13 @@ public class ConsultaService<R> {
 	}
 	
 	public ConsultaDto pegarConsultaPelaId(Long id) {
+		@SuppressWarnings("deprecation")
 		Consulta consulta=consultaRepository.getById(id);
 		ConsultaDto consultaDados=new ConsultaDto(consulta,this.fetchMedico(consulta.getMedico()),this.fetchPaciente(consulta.getPaciente() ) );
 		return consultaDados;
 	}
 
-	public Consulta cadastrar(FormConsulta dados) throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException, MenosDe30MinutosException, PacienteJaMarcouNoDiaException, MedicoEstaEmConsultaException {
+	public Consulta cadastrar(FormConsulta dados) throws MedicoNaoEstaNoSistemaException, PacienteNaoEstaNoSistemaException, MenosDe30MinutosException, PacienteJaMarcouNoDiaException, MedicoEstaEmConsultaException, MarcouConsultaNoPassadoException {
 		Consulta consulta= new Consulta(dados);
 		DataConsulta data=new DataConsulta(dados.dataConsulta());
 		consulta.setData(data);
@@ -99,24 +104,13 @@ public class ConsultaService<R> {
 		ChecarAntecendenciaDe30Minutos(data);
 		ChecarPacienteJaMarcouNoDia(paciente,data);
 		ChecarSeMedicoEstaDisponivel(medico,data);
+		ChecarSeConsultaNaoFoiFeitaNoPassado(data);
 		consulta.setMedico(medico.id());
 		dataRepository.save(data);
 		consultaRepository.save(consulta);
-		//Optional<Endereco> op=enderecoRepository.findById(dados.endereco());
-		//if(op.isPresent()) {
-			//medico.setEndereco(op.get());
-			//medicoRepository.save(medico); 
-			//return ; 
-		//}
 		return consulta; 
 	}
 	
-	public void ChecarAntecendenciaDe30Minutos(DataConsulta data) throws MenosDe30MinutosException {
-		LocalDateTime now = LocalDateTime.now(); 
-		if(now.getYear()==data.getAno()&& now.getMonthValue()==data.getMes()&& now.getDayOfMonth()==data.getDia()) {
-			if(now.getHour()*60+now.getMinute()-data.getHora()*60-data.getMinuto()<31) throw new MenosDe30MinutosException("As consulta tem que ser marcadas com 30 minuto de antecendencia");
-		}
-	}
 	
 	public void ChecarPacienteJaMarcouNoDia(PacienteDto paciente,DataConsulta data) throws PacienteJaMarcouNoDiaException  {
 		List<ConsultaDto> consultas=this.buscarTodos();
@@ -131,18 +125,29 @@ public class ConsultaService<R> {
 		List<ConsultaDto> consultaFiltradas=consultas.stream().filter( c->c.medico().id()==medico.id()&& 
 				data.getAno()==c.data().getAno()&& data.getMes()==c.data().getMes()&& c.data().getDia()==data.getDia() &&
 						data.getHora()*60-data.getMinuto()-c.data().getHora()*60+c.data().getMinuto()<31 ).collect(Collectors.toList());
-		System.err.println(data); 
 		if(consultaFiltradas.size()>0)  throw new MedicoEstaEmConsultaException("Medico está com consulta marcada nesse horário");
 
 	}
 	
 	public void ChecarSeConsultaNaoFoiFeitaNoPassado(DataConsulta data) throws MarcouConsultaNoPassadoException {
 		LocalDateTime now = LocalDateTime.now(); 
-		if(data.getAno()<now.getYear() || data.getMes()<now.getMonthValue()|| data.getDia()<now.getDayOfMonth()|| 
-				(now.getYear()==data.getAno()&& now.getMonthValue()==data.getMes()&& now.getDayOfMonth()==data.getDia() && data.getHora()<now.getHour()));{
+		if(data.getAno()<now.getYear() || data.getMes()<now.getMonthValue()|| data.getDia()<now.getDayOfMonth()||
+		(	now.getYear()==data.getAno()&& now.getMonthValue()==data.getMes()&& now.getDayOfMonth()==data.getDia() && data.getHora()<now.getHour()		 ) ||
+		( now.getYear()==data.getAno()&& now.getMonthValue()==data.getMes()&& now.getDayOfMonth()==data.getDia() && data.getHora()==now.getHour() && data.getHora()<now.getMinute() 	   )
+				) {
 					throw new MarcouConsultaNoPassadoException("Marcou consulta no passado");
-				}
+		}
 	}
+	
+	public void ChecarAntecendenciaDe30Minutos(DataConsulta data) throws MenosDe30MinutosException, MarcouConsultaNoPassadoException {
+		ChecarSeConsultaNaoFoiFeitaNoPassado(data);
+		LocalDateTime now = LocalDateTime.now(); 
+		if(now.getYear()==data.getAno()&& now.getMonthValue()==data.getMes()&& now.getDayOfMonth()==data.getDia()) {
+			if(data.getHora()*60+data.getMinuto()-now.getHour()*60-now.getMinute()<31) {
+				throw new MenosDe30MinutosException("As consulta tem que ser marcadas com 30 minuto de antecendencia");
+			} 
+		}
+	}  
 	
 	
 	public MedicoDto pegarMedicoAleatorio(List<MedicoDto> medicos) {
@@ -152,6 +157,30 @@ public class ConsultaService<R> {
 	     MedicoDto rndmElem = medicos.get(rndm.nextInt(medicos.size()));
 		return rndmElem;
 	}
+	
+	public Consulta desmarcar(Long id,MotivoCancelamento motivo) throws ConsultaNaoEncontradaException, CancelarCom1DiaDeAntecedenciaException {
+		@SuppressWarnings("deprecation")
+		Consulta consulta=consultaRepository.getById(id);
+		Optional<Consulta> op=consultaRepository.findById(id);
+		if(op.isPresent()) {
+			checarSeCancelamentoTemMaisDe24Horas(consulta);
+			consulta.setCancelado();
+			consulta.setMotivo(motivo);
+			consultaRepository.save(consulta);
+			return consulta; 
+		} 
+		else throw new ConsultaNaoEncontradaException("Consulta Nao encontrada");
+	}
+	
+	public void checarSeCancelamentoTemMaisDe24Horas(Consulta consulta) throws CancelarCom1DiaDeAntecedenciaException {
+		LocalDateTime now = LocalDateTime.now(); 
+		DataConsulta data=consulta.getData();
+		if(now.getYear()==data.getAno()&& now.getMonthValue()==data.getMes()&& now.getDayOfMonth()==data.getDia()) {
+			throw new CancelarCom1DiaDeAntecedenciaException("Voce so pode cancelar uma consulta com um dia de antecedencia");
+		}
+	}
+	
+
 	/*
 	 */
 

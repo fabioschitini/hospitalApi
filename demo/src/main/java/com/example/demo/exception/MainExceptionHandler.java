@@ -11,10 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -37,12 +35,12 @@ public class MainExceptionHandler  {
     
     
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleException(HttpMessageNotReadableException exception, HttpServletRequest request) {
-    	Map<String,String> errors=new HashMap<String,String>();
+    public ResponseEntity<HashMap<String, String>> handleException(HttpMessageNotReadableException exception, HttpServletRequest request) {
+    	HashMap<String, String> errors=new HashMap<String,String>();
     	String str=exception.getMessage();
     	str.split("(?=Enum:|rk)");
 		errors.put("mensagem",str);
-        return new ResponseEntity(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<HashMap<String,String>>(errors, HttpStatus.BAD_REQUEST);
     }
  
 
@@ -66,8 +64,8 @@ public class MainExceptionHandler  {
 	@ExceptionHandler(MenosDe30MinutosException.class)
 	public ResponseEntity<?> handleMenosDe30MinutosException(){
 		Map<String,String> errors=new HashMap<String,String>();
-		errors.put("mensagem","As consulta tem que ser marcadas com 30 minuto de antecendencia");
-		System.err.println("As consulta tem que ser marcadas com 30 minuto de antecendencia");
+		errors.put("mensagem","As consulta tem que ser marcadas com no minimo 30 minuto de antecendencia");
+		System.err.println("As consulta tem que ser marcadas com no minimo 30 minuto de antecendencia");
 		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(PacienteJaMarcouNoDiaException.class)
@@ -91,6 +89,22 @@ public class MainExceptionHandler  {
 		Map<String,String> errors=new HashMap<String,String>();
 		errors.put("mensagem","Marcou consulta no passado");
 		System.err.println("Marcou consulta no passado");
+		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(CancelarCom1DiaDeAntecedenciaException.class)
+	public ResponseEntity<?> handleCancelarCom1DiaDeAntecedenciaException(){
+		Map<String,String> errors=new HashMap<String,String>();
+		errors.put("mensagem","Voce so pode cancelar uma consulta com um dia de antecedencia");
+		System.err.println("Voce so pode cancelar uma consulta com um dia de antecedencia");
+		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(ConsultaNaoEncontradaException.class)
+	public ResponseEntity<?> handleConsultaNaoEncontradaException(){
+		Map<String,String> errors=new HashMap<String,String>();
+		errors.put("mensagem","Consulta nao encontrada");
+		System.err.println("Consulta nao encontrada");
 		return new ResponseEntity<>( errors,HttpStatus.BAD_REQUEST);
 	}
 	
