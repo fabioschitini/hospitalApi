@@ -1,6 +1,7 @@
 package com.example.hospital.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.example.hospital.dto.DadosListadosDeMedico;
 
 import com.example.hospital.dto.FormMedico;
 import com.example.hospital.dto.FormMedicoUpdate;
+import com.example.hospital.exceptions.MedicoNaoEstaNoSistemaException;
 import com.example.hospital.models.Medico;
 import com.example.hospital.models.Endereco;
 import com.example.hospital.repositorys.EnderecoRepository;
@@ -65,6 +67,7 @@ public class MedicoService {
 	}
 	
 
+	@SuppressWarnings("deprecation")
 	public DadosParaConsulta getPelaId(Long id){
 		
 		java.util.Optional<Medico> op=medicoRepository.findById(id);
@@ -82,43 +85,41 @@ public class MedicoService {
 		medico.setEndereco(endereco);
 		enderecoRepository.save(endereco);
 		medicoRepository.save(medico);
-
-		//Optional<Endereco> op=enderecoRepository.findById(dados.endereco());
-		//if(op.isPresent()) {
-			//medico.setEndereco(op.get());
-			//medicoRepository.save(medico);
-			//return ; 
-		//}
 		return medico; 
 	}
 	
-	public Medico atualizar(FormMedicoUpdate dados,Long id) {
+	public Medico atualizar(FormMedicoUpdate dados,Long id) throws MedicoNaoEstaNoSistemaException {
 		@SuppressWarnings("deprecation")
 		Medico medico=medicoRepository.getById(id);
-		@SuppressWarnings("deprecation")
-		Endereco endereco=new Endereco(dados.endereco());
-		
-		medico.setNome(dados.nome());
-		medico.setTelefone(dados.telefone());
-		endereco.setComplemento(dados.endereco().complemento());
-		endereco.setNumero(dados.endereco().numero());
-		medico.setEndereco(endereco);
-		enderecoRepository.save(endereco);
-		medicoRepository.save(medico);
-		return medico;
+		Optional<Medico> op=medicoRepository.findById(id);
+		if(op.isPresent()) {
+			Endereco endereco=new Endereco(dados.endereco());
+			medico.setNome(dados.nome());
+			medico.setTelefone(dados.telefone());
+			endereco.setComplemento(dados.endereco().complemento());
+			endereco.setNumero(dados.endereco().numero());
+			medico.setEndereco(endereco);
+			enderecoRepository.save(endereco);
+			medicoRepository.save(medico);
+			return medico;
+		} 
+		else throw new MedicoNaoEstaNoSistemaException("Medico Nao está no sistema");
 	}
 	
 	
-	public Medico deletar(Long id) {
+	public void deletar(Long id) throws MedicoNaoEstaNoSistemaException {
 		@SuppressWarnings("deprecation")
 		Medico medico=medicoRepository.getById(id);
-		@SuppressWarnings("deprecation")
-		Endereco endereco=enderecoRepository.getById(id);
-		medico.setApagado(true);
-		endereco.setApagado(true);
-		enderecoRepository.save(endereco);
-		medicoRepository.save(medico);
-		return medico;
+		Optional<Medico> op=medicoRepository.findById(id);
+		if(op.isPresent()) {
+			@SuppressWarnings("deprecation")
+			Endereco endereco=enderecoRepository.getById(id);
+			medico.setApagado(true);
+			endereco.setApagado(true);
+			enderecoRepository.save(endereco); 
+			medicoRepository.save(medico);
+		} 
+		else throw new MedicoNaoEstaNoSistemaException("Medico Nao está no sistema");
 	}
 
 

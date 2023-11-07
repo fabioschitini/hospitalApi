@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import com.example.Pacientes.dto.DadosEndereco;
 import com.example.Pacientes.dto.DadosListadosDePacientes;
 import com.example.Pacientes.dto.FormPaciente;
 import com.example.Pacientes.dto.FormPacienteUpdate;
+import com.example.Pacientes.exceptions.PacienteNaoEstaNoSistemaException;
 import com.example.Pacientes.models.Paciente;
 import com.example.Pacientes.service.EnderecoService;
 import com.example.Pacientes.service.PacienteService;
@@ -43,7 +46,7 @@ public class PacienteController {
 	} 
 
 	
-	
+	 
 	@GetMapping("/{id}")
 	public DadosParaConsulta getPelaId(@PathVariable Long id) {
 		return pacienteService.getPelaId(id);
@@ -60,23 +63,22 @@ public class PacienteController {
 	} 
 	 
 	@PostMapping
-	public ResponseEntity<DadosPacientes> cadastrar(@RequestBody @Valid FormPaciente dados) {
+	public ResponseEntity<DadosPacientes> cadastrar(@RequestBody @Valid FormPaciente dados)  throws  MethodArgumentNotValidException,HttpMessageNotReadableException {
 		Paciente paciente; 
 		paciente = pacienteService.cadastrar(dados);
 		return new ResponseEntity<DadosPacientes>( new DadosPacientes(paciente) ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<DadosPacientes> atualizar(@RequestBody @Valid FormPacienteUpdate dados,@PathVariable Long id) {
+	public ResponseEntity<DadosPacientes> atualizar(@RequestBody @Valid FormPacienteUpdate dados,@PathVariable Long id) throws PacienteNaoEstaNoSistemaException {
 		Paciente paciente;
 		paciente = pacienteService.atualizar(dados,id); 
 		return new ResponseEntity<DadosPacientes>( new DadosPacientes(paciente) ,HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}")
-	public String deletar(@PathVariable Long id) {
-		Paciente paciente;
-		paciente = pacienteService.deletar(id);
+	public String deletar(@PathVariable Long id) throws PacienteNaoEstaNoSistemaException {
+		pacienteService.deletar(id);
 		return "Deletado com Sucesso";
 	}
 	  

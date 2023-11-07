@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import com.example.hospital.dto.DadosEndereco;
 import com.example.hospital.dto.DadosListadosDeMedico;
 import com.example.hospital.dto.FormMedico;
 import com.example.hospital.dto.FormMedicoUpdate;
+import com.example.hospital.exceptions.MedicoNaoEstaNoSistemaException;
 import com.example.hospital.models.Medico;
 import com.example.hospital.service.EnderecoService;
 import com.example.hospital.service.MedicoService;
@@ -38,8 +41,8 @@ public class MedicoController {
 
 	
 	@GetMapping
-	public String listarTodos(){
-		return medicoService.buscarTodos().toString();
+	public List<DadosMedicos> listarTodos(){
+		return medicoService.buscarTodos();
 	} 
 	
 
@@ -65,23 +68,22 @@ public class MedicoController {
 	} 
 	
 	@PostMapping
-	public ResponseEntity<DadosMedicos> cadastrar(@RequestBody @Valid FormMedico dados) {
+	public ResponseEntity<?> cadastrar(@RequestBody @Valid FormMedico dados) throws MethodArgumentNotValidException,HttpMessageNotReadableException {
 		Medico medico;
 		medico = medicoService.cadastrar(dados);
-		return new ResponseEntity<DadosMedicos>( new DadosMedicos(medico) ,HttpStatus.CREATED);
+		return new ResponseEntity<>( new DadosMedicos(medico) ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<DadosMedicos> atualizar(@RequestBody @Valid FormMedicoUpdate dados,@PathVariable Long id) {
+	public ResponseEntity<DadosMedicos> atualizar(@RequestBody @Valid FormMedicoUpdate dados,@PathVariable Long id) throws MedicoNaoEstaNoSistemaException {
 		Medico medico;
 		medico = medicoService.atualizar(dados,id);
 		return new ResponseEntity<DadosMedicos>( new DadosMedicos(medico) ,HttpStatus.CREATED);
-	}
+	} 
 	
 	@DeleteMapping("/{id}")
-	public String deletar(@PathVariable Long id) {
-		Medico medico;
-		medico = medicoService.deletar(id);
+	public String deletar(@PathVariable Long id) throws MedicoNaoEstaNoSistemaException {
+		 medicoService.deletar(id);
 		return "Deletado com Sucesso";
 	}
 	

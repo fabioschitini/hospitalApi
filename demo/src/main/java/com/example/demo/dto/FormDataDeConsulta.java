@@ -16,7 +16,7 @@ public record FormDataDeConsulta(
 @NotNull(message = "dia_da_semana  Invalido,não pode ser nulo") DiaDaSemana dia_da_semana, 
 @NotNull(message = "hora Invalido,não pode ser nulo")     @Min(value = 7, message = "Hora Invalida: tem que ser maior ou igual a 7")
 @Max(value = 19, message = "Hora Invalida: Tem que ser menor ou igual a 19") int hora,  
-@NotNull(message = "Minuto Invalido,não pode ser nulo")  @Min(value = 1, message = "Minuto Invalido: tem que ser maior ou igual a 1")
+@NotNull(message = "Minuto Invalido,não pode ser nulo")  @Min(value = 0, message = "Minuto Invalido: tem que ser maior ou igual a 0")
 @Max(value = 60, message = "Minuto Invalido: Tem que ser menor ou igual a 60") int minuto) {
 
 }  

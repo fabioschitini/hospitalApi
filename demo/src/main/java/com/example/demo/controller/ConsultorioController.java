@@ -74,17 +74,5 @@ public class ConsultorioController {
 		ConsultaDto coonsultaCadastrada=new ConsultaDto(consulta,consultaService.fetchMedico(consulta.getMedico()),consultaService.fetchPaciente(consulta.getPaciente()));
 		return new ResponseEntity<>(coonsultaCadastrada, HttpStatus.CREATED);
 	}
-	/*
-	@GetMapping("/buscarPorNome")
-	public List<DadosPost> listarPorTitulo(String titulo){
-		return postService.buscarPorTitulo(titulo);
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> apagar(@PathVariable Long id) {
-		postService.apagar(id);
-		return  new ResponseEntity<>(HttpStatus.ACCEPTED);
-	}
-	*/  
 
 }
