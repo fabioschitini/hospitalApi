@@ -39,6 +39,8 @@ public class PacienteService {
 	public List<DadosListadosDePacientes> converterOrdenado(List<Paciente> lista){
 		if(lista.isEmpty()) return null;
 		return lista.stream()
+				.filter(c -> c.isApagado()==false)
+				.sorted((object1, object2) -> object1.getNome().compareTo(object2.getNome()))
 				.map(DadosListadosDePacientes::new).collect(Collectors.toList());
 	}
 	

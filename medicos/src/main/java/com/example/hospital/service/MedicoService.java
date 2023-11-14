@@ -39,7 +39,7 @@ public class MedicoService {
 	public List<DadosListadosDeMedico> converterOrdenado(List<Medico> lista){
 		if(lista.isEmpty()) return null;
 		return lista.stream()
-				.filter(c -> c.isApagado()==false)
+				.filter(c -> c.isApagado()==false) 
 				.sorted((object1, object2) -> object1.getNome().compareTo(object2.getNome()))
 				.map(DadosListadosDeMedico::new).collect(Collectors.toList());
 	}

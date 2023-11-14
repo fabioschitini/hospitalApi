@@ -41,10 +41,9 @@ public class PacienteController {
 
 	
 	@GetMapping
-	public List<DadosPacientes> listarTodos(){
-		return pacienteService.buscarTodos();
+	public List<DadosListadosDePacientes> listarTodos(){
+		return pacienteService.buscarOrdenado();
 	} 
-
 	
 	 
 	@GetMapping("/{id}")
@@ -57,9 +56,9 @@ public class PacienteController {
 		return enderecoService.buscarTodosEnderecos();
 	} 
 	
-	@GetMapping("/ordenado")
-	public List<DadosListadosDePacientes> listarTodosOrdenado(){
-		return pacienteService.buscarOrdenado();
+	@GetMapping("/api")
+	public List<DadosPacientes> listarTodosOrdenado(){
+		return pacienteService.buscarTodos();
 	} 
 	 
 	@PostMapping

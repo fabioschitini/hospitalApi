@@ -41,8 +41,8 @@ public class MedicoController {
 
 	
 	@GetMapping
-	public List<DadosMedicos> listarTodos(){
-		return medicoService.buscarTodos();
+	public List<DadosListadosDeMedico> listarTodos(){
+		return medicoService.buscarOrdenado();
 	} 
 	
 
@@ -62,9 +62,9 @@ public class MedicoController {
 		return enderecoService.buscarTodosEnderecos();
 	} 
 	
-	@GetMapping("/ordenado")
-	public List<DadosListadosDeMedico> listarTodosOrdenado(){
-		return medicoService.buscarOrdenado();
+	@GetMapping("/api")
+	public List<DadosMedicos> listarTodosOrdenado(){
+		return medicoService.buscarTodos();
 	} 
 	
 	@PostMapping
