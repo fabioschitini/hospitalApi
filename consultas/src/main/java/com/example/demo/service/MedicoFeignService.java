@@ -14,7 +14,7 @@ import com.example.demo.dto.MedicoDto;
 @FeignClient(value="medico",url="http://localhost:8082/medico-ms/medicos/consulta")
 @Service
 public interface MedicoFeignService {
-    @RequestMapping(method = RequestMethod.GET, value = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/api")
     List<MedicoDto> getAllMedicos(); 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     MedicoDto getMedicos(@PathVariable Long id);
