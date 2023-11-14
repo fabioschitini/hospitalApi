@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.example.demo.dto.MedicoDto;
 
 
-@FeignClient(value="medico",url="http://10.0.0.5:8082/medico-ms/medicos/consulta")
+@FeignClient(value="medico",url="http://localhost/medico-ms/medicos/consulta")
 @Service
 public interface MedicoFeignService {
     @RequestMapping(method = RequestMethod.GET, value = "")
