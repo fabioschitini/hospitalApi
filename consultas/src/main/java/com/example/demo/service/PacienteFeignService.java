@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.demo.dto.PacienteDto;
 
-@FeignClient(value="paciente",url="http://10.0.0.5:8082/paciente-ms/pacientes")
+@FeignClient(value="paciente",url="http://localhost/paciente-ms/pacientes")
 @Service
 public interface PacienteFeignService {
 	
