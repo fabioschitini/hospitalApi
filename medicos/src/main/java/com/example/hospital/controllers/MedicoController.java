@@ -30,7 +30,7 @@ import com.example.hospital.service.MedicoService;
 import jakarta.validation.Valid;
 
 
-@RestController 
+@RestController  
 @RequestMapping("/medicos")
 public class MedicoController { 
 	 

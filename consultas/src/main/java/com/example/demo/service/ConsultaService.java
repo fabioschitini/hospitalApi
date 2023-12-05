@@ -51,6 +51,7 @@ public class ConsultaService<R> {
 	public List<ConsultaDto> converterDadosConsulta(List<Consulta> lista) {
 		if(lista.isEmpty()) return null;
 			return lista.stream()
+			.filter(c -> c.isCancelado()==false) 
              .map( emp -> new ConsultaDto(emp, this.fetchMedico(emp.getMedico()), this.fetchPaciente(emp.getPaciente() )) )
              .collect(Collectors.toList());
 	
