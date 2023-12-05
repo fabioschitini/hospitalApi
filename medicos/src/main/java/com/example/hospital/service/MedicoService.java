@@ -34,7 +34,7 @@ public class MedicoService {
 		return lista.stream()
 				.filter(c -> c.isApagado()==false)
 				.map(DadosMedicos::new).collect(Collectors.toList());
-	}
+	}   
 	
 	public List<DadosListadosDeMedico> converterOrdenado(List<Medico> lista){
 		if(lista.isEmpty()) return null;

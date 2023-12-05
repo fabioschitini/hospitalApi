@@ -96,9 +96,9 @@ public class ConsultaService<R> {
 		Consulta consulta= new Consulta(dados);
 		DataConsulta data=new DataConsulta(dados.dataConsulta());
 		consulta.setData(data);
-		MedicoDto medico=null;
+		MedicoDto medico=null;   
 		if(dados.medico()==null)medico=this.pegarMedicoAleatorio(this.fetchAllMedico());
-		else medico=this.fetchMedico(consulta.getMedico());
+		else medico=this.fetchMedico(consulta.getMedico());   
 		PacienteDto paciente=this.fetchPaciente(consulta.getPaciente());
 		if(medico==null) throw new MedicoNaoEstaNoSistemaException("Medico nao esta cadastrado no sistema");
 		if(paciente==null) throw new PacienteNaoEstaNoSistemaException("Paciente nao esta cadastrado no sistema");
